@@ -11,12 +11,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
 
     // The ViewModel replaces the local list. It is created once and kept across rotations.
-    private val viewModel: PatientViewModel by viewModels()
-
+    private lateinit var viewModel: PatientViewModel
     private lateinit var tvPatients: TextView
     private lateinit var tvNombrePatients: TextView
 
@@ -24,6 +25,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        viewModel = ViewModelProvider(this).get(PatientViewModel::class.java)
+
+        viewModel.patients.observe(this){liste -> tvPatients.text = if (liste.isEmpty()){
+            "aucun patient enregistre"
+        }else{
+            liste.joinToString("\n"){
+                "${it.id}-${it.nom}"
+            }
+        }
+        }
+
+            //completer.....................................................waaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
         Log.d("MainActivity", "onCreate Called")
 
