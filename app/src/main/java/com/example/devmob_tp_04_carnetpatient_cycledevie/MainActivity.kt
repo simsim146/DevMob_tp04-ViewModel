@@ -11,13 +11,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 
 class MainActivity : AppCompatActivity() {
 
-    // The ViewModel replaces the local list. It is created once and kept across rotations.
-    private lateinit var viewModel: PatientViewModel
+    // Created once and kept across rotations
+    private val viewModel: PatientViewModel by viewModels()
+
     private lateinit var tvPatients: TextView
     private lateinit var tvNombrePatients: TextView
 
@@ -25,20 +24,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-
-        viewModel = ViewModelProvider(this).get(PatientViewModel::class.java)
-
-        viewModel.patients.observe(this){liste -> tvPatients.text = if (liste.isEmpty()){
-            "aucun patient enregistre"
-        }else{
-            liste.joinToString("\n"){
-                "${it.id}-${it.nom}"
-            }
-        }
-        }
-
-            //completer.....................................................waaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
         Log.d("MainActivity", "onCreate Called")
 
         val main = findViewById<View>(R.id.main)
@@ -52,43 +37,42 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        // 1) Initialize the views FIRST
         val etId = findViewById<EditText>(R.id.etId)
         val etNom = findViewById<EditText>(R.id.etNom)
         val btnAjouter = findViewById<Button>(R.id.btnAjouter)
         tvPatients = findViewById(R.id.tvPatients)
         tvNombrePatients = findViewById(R.id.tvNombrePatients)
 
-        // Displays the data already held by the ViewModel (e.g. after a rotation)
-        afficherPatients()
+        // 2) THEN observe the LiveData (also fires after rotation with the existing data)
+        viewModel.patients.observe(this) { liste ->
+            tvNombrePatients.text = "Nombre de patients : ${liste.size}"
+            tvPatients.text = if (liste.isEmpty()) {
+                "Aucun patient enregistré"
+            } else {
+                liste.joinToString("\n") { "${it.id} — ${it.nom}" }
+            }
+        }
 
         btnAjouter.setOnClickListener {
             etId.error = null
             etNom.error = null
             val id = etId.text.toString().trim().toIntOrNull()
             val nom = etNom.text.toString().trim()
+
             if (id == null || id <= 0) {
                 etId.error = "Saisir un identifiant positif"
             } else if (nom.isBlank()) {
                 etNom.error = "Saisir le nom du patient"
-            } else if (viewModel.patients.any { it.id == id }) {
+            } else if (!viewModel.ajouter(id, nom)) {
+                // ajouter() returns false when the ID already exists
                 etId.error = "Cet identifiant existe déjà"
             } else {
-                viewModel.ajouter(id, nom)
-                afficherPatients()
+                // The UI updates automatically through the observer
                 etId.text.clear()
                 etNom.text.clear()
                 etId.requestFocus()
             }
-        }
-    }
-
-    private fun afficherPatients() {
-        val liste = viewModel.patients
-        tvNombrePatients.text = "Nombre de patients : ${liste.size}"
-        tvPatients.text = if (liste.isEmpty()) {
-            "Aucun patient enregistré"
-        } else {
-            liste.joinToString("\n") { "${it.id} — ${it.nom}" }
         }
     }
 
