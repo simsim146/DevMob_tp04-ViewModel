@@ -1,5 +1,6 @@
 package com.example.devmob_tp_04_carnetpatient_cycledevie
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -74,6 +75,35 @@ class MainActivity : AppCompatActivity() {
                 etId.requestFocus()
             }
         }
+
+        //appeler l'activité a partir de la botton
+        val btnAfficherPatient = findViewById<Button>(R.id.btnAfficherPatient)
+        btnAfficherPatient.setOnClickListener {
+            etId.error = null
+            val id = etId.text.toString().trim().toIntOrNull()
+            if (id == null || id <= 0) {
+                etId.error = "Saisir un identifiant positif"
+                return@setOnClickListener
+            }
+            // Rechercher le patient déjà enregistré.
+            val patient = viewModel.patients.value
+                .orEmpty()
+                .find { it.id == id }
+            if (patient == null) {
+                etId.error = "Patient introuvable"
+                return@setOnClickListener
+            }
+            // Préparer la navigation.
+            val intention = Intent(
+                this,
+                AfficherPatientActivity::class.java
+            )
+            // Transmettre les deux attributs séparément.
+            intention.putExtra("patient_id", patient.id)
+            intention.putExtra("patient_nom", patient.nom)
+            startActivity(intention)
+        }
+
     }
 
     override fun onStart() {

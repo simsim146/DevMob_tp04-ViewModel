@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,41 +15,44 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
+
     <TextView
         android:id="@+id/tvTitre"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
         android:text="Carnet Patients"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideMilieu"
-        android:layout_marginEnd="12dp" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/etId"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="348dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
         android:hint="Identifiant"
         android:inputType="number"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tvTitre"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideMilieu"
-        android:layout_marginEnd="12dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitre" />
 
     <EditText
         android:id="@+id/etNom"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="345dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
         android:hint="Nom du patient"
         android:inputType="textPersonName"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/etId"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideMilieu"
-        android:layout_marginEnd="12dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etId" />
     <Button
         android:id="@+id/btnAjouter"
         android:layout_width="0dp"
@@ -59,6 +63,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideMilieu"
         android:layout_marginEnd="12dp" />
+
+    <Button
+        android:id="@+id/btnAfficherPatient"
+        android:layout_width="341dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="12dp"
+
+        android:text="Afficher"
+        app:layout_constraintEnd_toStartOf="@+id/guideMilieu"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnModifier" />
+
+    <Button
+        android:id="@+id/btnModifier"
+        android:layout_width="337dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="12dp"
+        android:text="Modifier"
+        app:layout_constraintEnd_toStartOf="@+id/guideMilieu"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAjouter" />
+
     <TextView
         android:id="@+id/tvNombrePatients"
         android:layout_width="0dp"
@@ -70,15 +98,18 @@
         app:layout_constraintStart_toEndOf="@id/guideMilieu"
         android:layout_marginStart="12dp"
         app:layout_constraintEnd_toEndOf="parent" />
+
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/tvNombrePatients"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/guideMilieu"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/tvNombrePatients">
+
         <TextView
             android:id="@+id/tvPatients"
             android:layout_width="match_parent"
